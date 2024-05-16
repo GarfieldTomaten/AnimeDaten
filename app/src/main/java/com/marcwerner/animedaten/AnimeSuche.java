@@ -1,9 +1,9 @@
-package com.anastasia.myroomactivity;
+package com.marcwerner.animedaten;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "user")
+@Entity(tableName = "Anime")
 public class AnimeSuche {
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -34,12 +34,12 @@ public class AnimeSuche {
         this.lastName = lastName;
     }
 
-    public User(String firstName, String lastName) {
+    public AnimeSuche(String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public void delete() {
+    public void delete(AnimeSuche anime) {
     }
 }

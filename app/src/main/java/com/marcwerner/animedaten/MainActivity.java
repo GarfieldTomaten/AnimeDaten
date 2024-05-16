@@ -32,24 +32,24 @@ public class MainActivity extends AppCompatActivity {
         bt_delete = findViewById(R.id.bt_delete);
 
         final AppDatabase database = AppDatabase.getDatabase(this);
-        final UserDao userDao = database.userDao();
+        final NamenDao namenDao = database.namenDao();
 
         bt_save.setOnClickListener(v -> {
             String fName = firstname.getText().toString();
             String lName = lastname.getText().toString();
-            User user = new User(fName, lName);
-            new InsertAsyncTask(userDao).execute(user);
+            AnimeSuche Anime = new AnimeSuche(fName, lName);
+            new InsertAsyncTask(namenDao).execute(Anime);
         });
 
         bt_search.setOnClickListener(v -> {
             String fName = firstname.getText().toString();
             String lName = lastname.getText().toString();
-            userDao.getUserByFullName(fName, lName).observe(this, new Observer<List<User>>() {
+            namenDao.getAnimeByFullName(fName, lName).observe(this, new Observer<List<AnimeSuche>>() {
                 @Override
-                public void onChanged(List<User> users) {
-                    if (!users.isEmpty()) {
-                        User user = users.get(users.size() - 1);
-                        tv_ausgabe.setText(user.getFirstName() + " " + user.getLastName());
+                public void onChanged(List<AnimeSuche> Animes) {
+                    if (!Animes.isEmpty()) {
+                        AnimeSuche Anime = Animes.get(Animes.size() - 1);
+                        tv_ausgabe.setText(Anime.getFirstName() + " " + Anime.getLastName());
                     }
                 }
             });
@@ -57,31 +57,33 @@ public class MainActivity extends AppCompatActivity {
         bt_delete.setOnClickListener(v -> {
             String fName = firstname.getText().toString();
             String lName = lastname.getText().toString();
-            User user = new User(fName, lName);
-            new DeleteAsyncTask(userDao).execute(user);
+            AnimeSuche Anime = new AnimeSuche(fName, lName);
+            new DeleteAsyncTask(namenDao).execute(Anime);
         });
 
     }
 
-    private static class InsertAsyncTask extends AsyncTask<User, Void, Void> {
-        private UserDao asyncUserDao;
+    private static class InsertAsyncTask extends AsyncTask<AnimeSuche, Void, Void> {
+        private NamenDao asyncNamenDao;
 
-        InsertAsyncTask(UserDao userDao) {
-            asyncUserDao = userDao;
+        InsertAsyncTask(NamenDao namenDao) {
+            asyncNamenDao = namenDao;
         }
 
         @Override
-        protected Void doInBackground(User... users) {
-            asyncUserDao.insert(users[0]);
+        protected Void doInBackground(AnimeSuche... animes) {
+            asyncNamenDao.insert(animes[0]);
             return null;
         }
     }
-    private static class DeleteAsyncTask extends AsyncTask<User, Void, Void> {
-        private UserDao asyncUserDao;
-        DeleteAsyncTask(UserDao userDao) {
-            asyncUserDao = userDao;         }
-        public Void doInBackground(User... users) {
-            asyncUserDao.delete(users[0]);
+    private static class DeleteAsyncTask extends AsyncTask<AnimeSuche, Void, Void> {
+        private NamenDao asyncUserDao;
+        private AnimeSuche asyncNamenDao;
+
+        DeleteAsyncTask(NamenDao namenDao) {
+            asyncNamenDao = (AnimeSuche) namenDao;         }
+        public Void doInBackground(AnimeSuche... animes) {
+            asyncNamenDao.delete(animes[0]);
             return null;
         }
     }
