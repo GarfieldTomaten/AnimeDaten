@@ -8,18 +8,20 @@ import androidx.room.RoomDatabase;
 
 @Database(entities = {AnimeSuche.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
-
-    private static AppDatabase instance;
-
     public abstract NamenDao namenDao();
 
-    public static synchronized AppDatabase getDatabase(Context context) {
-        if (instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "Anime_database")
-                    .fallbackToDestructiveMigration()
-                    .build();
+    private static volatile AppDatabase INSTANCE;
+
+    public static AppDatabase getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (AppDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                                    AppDatabase.class, "anime_database")
+                            .build();
+                }
+            }
         }
-        return instance;
+        return INSTANCE;
     }
 }
